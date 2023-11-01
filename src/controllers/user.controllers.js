@@ -1,79 +1,156 @@
-const  {User,Code} = require("../models")
-const bcrypt = require("bcrypt")
-const sendEmail = require("../utils/nodeMail")
+const { User, Code } = require('../models')
+const bcrypt = require('bcrypt')
+const sendEmail = require('../utils/nodeMail')
+const jwt = require('jsonwebtoken')
 
-const createUser = async() => {
-    try {
-        
-        const {name, password, email, urlBase} = req.body
-        const body = {name,password,email}
-        body.password = await bcrypt.hash(password,10)
-        const result = await User.create(body);
-        const code = require("crypto").randomBytes(64).toString("hex")
-        const url = `${urlBase}/verify_email/${code}`
-        const send = await sendEmail({
-            to:email,
-            subject: "verificacion de cuenta",
-            html: `<div><h1> verifica tu cuenta<h1/>
+const createUser = async (req, res) => {
+  try {
+    const { name, password, email, urlBase } = req.body
+    const body = { name, password, email }
+    body.password = await bcrypt.hash(password, 10)
+    const result = await User.create(body)
+    const code = require('crypto').randomBytes(64).toString('hex')
+    const url = `${urlBase}/verify_email/${code}`
+    const send = await sendEmail({
+      to: email,
+      subject: 'verificacion de cuenta',
+      html: `<div><h1> verifica tu cuenta<h1/>
                     <a href="${url}"> has click aqui para verificar tu usuario<a/><div/>`
-        })
-    
-        const emailcode = {
-            code,
-            user_Id: result.id 
-        }
-        await Code.create(emailcode)
-        return res.status(201).json({result,send});
-
-    } catch (error) {
-        console.log(error)
-        return res.status(400).json({mgs:error})
+    })
+    console.log('result.id')
+    const emailcode = {
+      code,
+      user_id: result.id
     }
+    await Code.create(emailcode)
+    return res.status(204)
+  } catch (error) {
+    console.log(error)
+    return res.status(400).json({ mgs: error })
+  }
 }
 
-
-const verifyCode = catchError(async(req,res) => {
-   try {
-    const {code} = req.params
-    const emailcode = await Code.findOne({where:{code}})
-    if(!emailcode) return res.sendStatus(401)
-    const body = {
-        valid: true
-    }
-     await User.update(body,{where:{id:emailcode.userId}, returning:true})
-    emailcode.destroy()
-    return res.status(200).json({mgs:"user validated"})
-   } catch (error) {
-    return  res.status(400).json({mgs:'ups error'})
-   }
-})
-
-const loginUser = catchError(async(req,res) => {
-        
-   try {
-    const {email,password} = req.body
- 
-    const user = await User.findOne({where:{email}})
-    console.log(user)
-    if(!user) return res.sendStatus(401)
-    
-    if(user.valid == false) return res.sendStatus(401)
-    
-    const isPassword = await bcrypt.compare(password,user.password)
-    if(!isPassword) return res.sendStatus(401)
-    const token = jwt.sign({user},process.env.SECRET,{
-        expiresIn: "2h",
+const getCode = async (req, res) => {
+  try {
+    const { id } = req.params
+    const result = await Code.findOne({
+      where: { id },
+      include: [
+        {
+          model: User
+        }
+      ]
     })
-    return res.status(201).json({token,user})
-   } catch (error) {
+    console.log('hey')
+    return res.status(200).json({ result })
+  } catch (error) {
     return res.status(400)
-   }
+  }
+}
 
-})
+const getUser = async (req, res) => {
+  try {
+    console.log('heyyyyy')
+    const { id } = req.params
 
+    const result = await User.findByPk(id, {
+      include: 'Code'
+    })
+
+    return res.status(200).json(result)
+  } catch (error) {
+    return res.status(400)
+  }
+}
+
+const verifyCode = async (req, res) => {
+  try {
+    const { code } = req.params
+    console.log(req.params)
+    const emailcode = await Code.findOne({ where: { code } })
+    console.log(emailcode)
+    if (!emailcode) return res.sendStatus(401)
+    const body = {
+      isValid: true
+    }
+    await User.update(body, { where: { id: emailcode.user_id }, returning: true })
+    emailcode.destroy()
+    return res.status(200).json({ mgs: 'user validated' })
+  } catch (error) {
+    return res.status(400).json({ mgs: 'ups error' })
+  }
+}
+
+const deleteUser = async (req, res) => {
+  try {
+    const { id } = req.params
+    const resData = await User.destroy({ where: { id } })
+    return res.json(resData)
+  } catch (error) {
+    return res.status(400).json({ mgs: 'ups error' })
+  }
+}
+
+const loginUser = async (req, res) => {
+  try {
+    const { email, password } = req.body
+
+    const user = await User.findOne({ where: { email } })
+
+    if (!user) return res.sendStatus(401)
+
+    if (user.isValid == false) return res.sendStatus(401)
+
+    const isPassword = await bcrypt.compare(password, user.password)
+    if (!isPassword) return res.sendStatus(401)
+    console.log('aqui estamos a la vuelta')
+
+    const payload = {
+      id: user.id,
+      name: user.name,
+      role: user.role,
+      email: user.email
+    }
+
+    const token = jwt.sign(payload, process.env.SECRET, {
+      expiresIn: '2h'
+    })
+
+    return res.status(201).json({ token, user })
+  } catch (error) {
+    return res.status(400)
+  }
+}
+
+const renewToken = async (req, res) => {
+  console.log('renocandfo')
+  try {
+    const {name,email,role} = req.user
+    console.log(req.user)
+    const payload = {
+      name,
+      email,
+      role
+    }
+
+    console.log(payload)
+
+    const token = jwt.sign(payload, process.env.SECRET, {
+      expiresIn: '2h'
+    })
+    console.log(token)
+    return res.status(200).json({ token })
+  } catch (error) {
+    return res.status(400)
+  }
+}
 
 module.exports = {
-    createUser,
-    verifyCode,
-    loginUser
+  createUser,
+  verifyCode,
+  loginUser,
+  deleteUser,
+  getUser,
+  getCode,
+  renewToken
 }

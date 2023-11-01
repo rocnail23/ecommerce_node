@@ -1,7 +1,7 @@
-'use strict';
+'use strict'
 const {
   Model
-} = require('sequelize');
+} = require('sequelize')
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
     /**
@@ -9,11 +9,10 @@ module.exports = (sequelize, DataTypes) => {
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
-    static associate(models) {
+    static associate (models) {
       // define association here
-      User.hasOne(models.Code,{
-        as:"Code",
-        foreignKey:"user_id"
+      User.hasOne(models.Code, {
+        foreignKey: 'user_id'
       })
     }
   }
@@ -21,17 +20,19 @@ module.exports = (sequelize, DataTypes) => {
     name: DataTypes.STRING,
     email: DataTypes.STRING,
     password: DataTypes.STRING,
-    valid: {
-        type:DataTypes.BOOLEAN,
-        defaultValue: false
-    },
-    role: {
-      type: DataTypes.STRING,
-      defaultValue: "user"
-    }
+    isValid: DataTypes.BOOLEAN,
+    role: DataTypes.STRING
   }, {
     sequelize,
-    modelName: 'User',
-  });
-  return User;
-};
+    modelName: 'User'
+  })
+
+  User.prototype.toJSON = function () {
+    const values = Object.assign({}, this.get())
+    delete values.password
+    delete values.isValid
+    return values
+  }
+
+  return User
+}
