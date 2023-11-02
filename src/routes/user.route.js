@@ -1,4 +1,4 @@
-const { createUser, loginUser, verifyCode, deleteUser, getUser, getCode, renewToken } = require('../controllers/user.controllers')
+const { createUser, loginUser, verifyCode, updateUser, getUser, getCode, renewToken } = require('../controllers/user.controller')
 const express = require('express')
 const validateToken = require('../middleware/validateToken')
 const userRouter = express.Router()
@@ -12,13 +12,15 @@ userRouter.route('/auth')
 userRouter.route('/verifyCode/:code')
   .get(verifyCode)
 
-userRouter.route('/find/:id')
-  .get(getUser)
 
 userRouter.route('/code/:id')
   .get(getCode)
 
 userRouter.route('/validate')
   .get(validateToken, renewToken)
+
+  userRouter.route('/:id')
+  .get(getUser)
+  .put(updateUser)
 
 module.exports = userRouter

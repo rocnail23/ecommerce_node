@@ -1,7 +1,8 @@
-const { User, Code } = require('../models')
+const { User, Code, Cart,WishList,Product } = require('../models')
 const bcrypt = require('bcrypt')
 const sendEmail = require('../utils/nodeMail')
 const jwt = require('jsonwebtoken')
+const { Model } = require('sequelize')
 
 const createUser = async (req, res) => {
   try {
@@ -23,7 +24,7 @@ const createUser = async (req, res) => {
       user_id: result.id
     }
     await Code.create(emailcode)
-    return res.status(204)
+    return res.sendStatus(201)
   } catch (error) {
     console.log(error)
     return res.status(400).json({ mgs: error })
@@ -50,11 +51,22 @@ const getCode = async (req, res) => {
 
 const getUser = async (req, res) => {
   try {
-    console.log('heyyyyy')
-    const { id } = req.params
+    const { id } = req.params                            
+   
+    
 
     const result = await User.findByPk(id, {
-      include: 'Code'
+      include: [
+        {
+          model:Cart,
+          attributes:{ exclude:["user_id","createdAt","updatedAt"]},
+        },
+        {
+          model:WishList,
+          attributes:{ exclude:["user_id","createdAt","updatedAt"]},
+          include:Product
+        }
+      ]
     })
 
     return res.status(200).json(result)
@@ -73,7 +85,18 @@ const verifyCode = async (req, res) => {
     const body = {
       isValid: true
     }
-    await User.update(body, { where: { id: emailcode.user_id }, returning: true })
+    const id = emailcode.user_id
+    await User.update(body, {
+      where: { id },
+      returning: true
+    })
+
+    await WishList.create({user_id:id})
+    console.log("hojana")
+    await Cart.create({user_id: id})
+
+  
+
     emailcode.destroy()
     return res.status(200).json({ mgs: 'user validated' })
   } catch (error) {
@@ -97,7 +120,7 @@ const loginUser = async (req, res) => {
 
     const user = await User.findOne({ where: { email } })
 
-    if (!user) return res.sendStatus(401)
+    if (!user) return res.status(404).json({mgs:"invalid email"})
 
     if (user.isValid == false) return res.sendStatus(401)
 
@@ -125,7 +148,7 @@ const loginUser = async (req, res) => {
 const renewToken = async (req, res) => {
   console.log('renocandfo')
   try {
-    const {name,email,role} = req.user
+    const { name, email, role } = req.user
     console.log(req.user)
     const payload = {
       name,
@@ -145,6 +168,18 @@ const renewToken = async (req, res) => {
   }
 }
 
+const updateUser = async (req,res) => {
+  try {
+      const {id} = req.params
+      const value = req.body
+      await User.update(value,{where:{id},returning:true})
+      console.log("mama")
+    return  res.status(200).json({mgs:"good"})
+  } catch (error) {
+      return res.status(400)
+  }
+}
+
 module.exports = {
   createUser,
   verifyCode,
@@ -152,5 +187,6 @@ module.exports = {
   deleteUser,
   getUser,
   getCode,
-  renewToken
+  renewToken,
+  updateUser
 }
