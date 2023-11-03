@@ -28,5 +28,11 @@ module.exports = (sequelize, DataTypes) => {
     sequelize,
     modelName: 'Product',
   });
+
+  Product.prototype.toJSON = function () {
+      const values = Object.assign({}, this.get());
+      delete values.WishListProduct;
+      return values;
+  }
   return Product;
 };

@@ -3,6 +3,8 @@ const express = require('express')
 const validateToken = require('../middleware/validateToken')
 const userRouter = express.Router()
 
+
+
 userRouter.route('/')
   .post(createUser)
 

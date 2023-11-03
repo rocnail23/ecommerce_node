@@ -1,8 +1,8 @@
-const { User, Code, Cart,WishList,Product } = require('../models')
+const { User, Code, Cart,WishList,Product,ProductCart,Purchase } = require('../models')
 const bcrypt = require('bcrypt')
 const sendEmail = require('../utils/nodeMail')
 const jwt = require('jsonwebtoken')
-const { Model } = require('sequelize')
+
 
 const createUser = async (req, res) => {
   try {
@@ -60,11 +60,15 @@ const getUser = async (req, res) => {
         {
           model:Cart,
           attributes:{ exclude:["user_id","createdAt","updatedAt"]},
+          include: ProductCart
         },
         {
           model:WishList,
           attributes:{ exclude:["user_id","createdAt","updatedAt"]},
           include:Product
+        },
+        {
+          model:Purchase
         }
       ]
     })

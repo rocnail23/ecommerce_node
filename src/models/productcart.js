@@ -15,6 +15,8 @@ module.exports = (sequelize, DataTypes) => {
         {
           foreignKey: "product_id"
         })
+        ProductCart.belongsTo(models.Cart, {foreignKey: "cart_id"})
+      
     }
   }
   ProductCart.init({
@@ -22,7 +24,12 @@ module.exports = (sequelize, DataTypes) => {
     product_id: {
       type: DataTypes.INTEGER,
       references: {model: "Products", key: "id"}
-    }
+    },
+    cart_id:{
+      type: DataTypes.INTEGER,
+      references: {model: "Carts",key:"id"}
+    },
+
   }, {
     sequelize,
     modelName: 'ProductCart',
