@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
@@ -8,24 +8,24 @@ module.exports = {
      * Example:
      * await queryInterface.createTable('users', { id: Sequelize.INTEGER });
      */
-     await  queryInterface.createTable("WishListProduct",{
-        productId: {
-          type: Sequelize.INTEGER,
-          primaryKey:true
-        },
-        wishListId:{
-          type:Sequelize.INTEGER,
-          primaryKey:true,
-        },
-        createdAt: {
-          type: Sequelize.DATE,
-          allowNull: false
-        },
-        updatedAt: {
-          type: Sequelize.DATE,
-          allowNull: false
-        },
-      })
+    await queryInterface.createTable('WishListProduct', {
+      productId: {
+        type: Sequelize.INTEGER,
+        primaryKey: true
+      },
+      wishListId: {
+        type: Sequelize.INTEGER,
+        primaryKey: true
+      },
+      createdAt: {
+        type: Sequelize.DATE,
+        allowNull: false
+      },
+      updatedAt: {
+        type: Sequelize.DATE,
+        allowNull: false
+      }
+    })
   },
 
   async down (queryInterface, Sequelize) {
@@ -35,6 +35,6 @@ module.exports = {
      * Example:
      * await queryInterface.dropTable('users');
      */
-   await  queryInterface.dropTable("WishListProduct")
+    await queryInterface.dropTable('WishListProduct')
   }
-};
+}

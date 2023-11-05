@@ -1,6 +1,4 @@
-'use strict'
-
-const { QueryInterface } = require('sequelize')
+'use strict';
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
@@ -11,11 +9,11 @@ module.exports = {
      * Example:
      * await queryInterface.createTable('users', { id: Sequelize.INTEGER });
      */
-    queryInterface.addColumn('ProductCarts', 'purchase_id', {
+    await queryInterface.addColumn("Products","category_id",{
       type: Sequelize.INTEGER,
-      references: { model: 'Purchases', key: 'id' },
-      onDelete: 'SET NULL',
-      onUpdate: 'CASCADE'
+      references: {model:"Categories", key:"id"},
+      onDelete:"SET NULL",
+      onUpdate: "CASCADE"
     })
   },
 
@@ -26,7 +24,6 @@ module.exports = {
      * Example:
      * await queryInterface.dropTable('users');
      */
-    queryInterface.removeColumn('ProductCarts', 'purchase_id')
+    await queryInterface.removeColumn("Products","category_id")
   }
-
-}
+};

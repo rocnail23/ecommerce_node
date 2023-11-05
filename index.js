@@ -2,12 +2,17 @@ const express = require('express')
 const cors = require('cors')
 require('dotenv').config()
 const connectDb = require('./src/db/connectDb')
-
+const path = require("path")
+const helmet = require('helmet');
 
 const app = express()
 
 const Port = process.env.PORT || 4000
 
+app.use(express.static(path.join(__dirname, ".", "src", "public")))
+app.use(helmet({
+  crossOriginResourcePolicy: false,
+}));
 app.use(express.json())
 
 app.use(cors())

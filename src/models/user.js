@@ -15,16 +15,16 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'user_id'
       })
 
-     User.hasOne(models.WishList,{
-      foreignKey: "user_id"
-     })
-
-      User.hasOne(models.Cart,{
-        foreignKey: "user_id"
+      User.hasOne(models.WishList, {
+        foreignKey: 'user_id'
       })
 
-      User.hasMany(models.Purchase,{
-        foreignKey: "user_id"
+      User.hasOne(models.Cart, {
+        foreignKey: 'user_id'
+      })
+
+      User.hasMany(models.Purchase, {
+        foreignKey: 'user_id'
       })
     }
   }

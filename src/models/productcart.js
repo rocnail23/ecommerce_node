@@ -1,7 +1,7 @@
-'use strict';
+'use strict'
 const {
   Model
-} = require('sequelize');
+} = require('sequelize')
 module.exports = (sequelize, DataTypes) => {
   class ProductCart extends Model {
     /**
@@ -9,13 +9,15 @@ module.exports = (sequelize, DataTypes) => {
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
-    static associate(models) {
+    static associate (models) {
       // define association here
-       ProductCart.belongsTo(models.Product,
+      ProductCart.belongsTo(models.Product,
         {
-          foreignKey: "product_id"
+          foreignKey: 'product_id'
         })
-        ProductCart.belongsTo(models.Cart, {foreignKey: "cart_id"})
+      ProductCart.belongsTo(models.Cart, { foreignKey: 'cart_id',
+    onDelete:"SET NULL",
+  onUpdate: "CASCADE"})
       
     }
   }
@@ -23,16 +25,16 @@ module.exports = (sequelize, DataTypes) => {
     quantity: DataTypes.INTEGER,
     product_id: {
       type: DataTypes.INTEGER,
-      references: {model: "Products", key: "id"}
+      references: { model: 'Products', key: 'id' }
     },
-    cart_id:{
+    cart_id: {
       type: DataTypes.INTEGER,
-      references: {model: "Carts",key:"id"}
-    },
+      references: { model: 'Carts', key: 'id' }
+    }
 
   }, {
     sequelize,
-    modelName: 'ProductCart',
-  });
-  return ProductCart;
-};
+    modelName: 'ProductCart'
+  })
+  return ProductCart
+}

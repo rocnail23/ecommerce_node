@@ -1,7 +1,7 @@
-'use strict';
+'use strict'
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
-  async up(queryInterface, Sequelize) {
+  async up (queryInterface, Sequelize) {
     await queryInterface.createTable('Carts', {
       id: {
         allowNull: false,
@@ -12,9 +12,9 @@ module.exports = {
       totalMount: {
         type: Sequelize.DECIMAL
       },
-      user_id:{
+      user_id: {
         type: Sequelize.INTEGER,
-        references: {model:"Users", key:"id"}
+        references: { model: 'Users', key: 'id' }
       },
       createdAt: {
         allowNull: false,
@@ -24,9 +24,9 @@ module.exports = {
         allowNull: false,
         type: Sequelize.DATE
       }
-    });
+    })
   },
-  async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Carts');
+  async down (queryInterface, Sequelize) {
+    await queryInterface.dropTable('Carts')
   }
-};
+}

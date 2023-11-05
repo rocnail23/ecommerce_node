@@ -1,13 +1,14 @@
-const { User, Code, Cart,WishList,Product,ProductCart,Purchase } = require('../models')
+const { User, Code, Cart, WishList, Product, ProductCart, Purchase } = require('../models')
 const bcrypt = require('bcrypt')
 const sendEmail = require('../utils/nodeMail')
 const jwt = require('jsonwebtoken')
-
 
 const createUser = async (req, res) => {
   try {
     const { name, password, email, urlBase } = req.body
     const body = { name, password, email }
+    const existEmail = await User.findOne({where:{email}})
+    if(existEmail) return res.sendStatus(403)
     body.password = await bcrypt.hash(password, 10)
     const result = await User.create(body)
     const code = require('crypto').randomBytes(64).toString('hex')
@@ -51,24 +52,22 @@ const getCode = async (req, res) => {
 
 const getUser = async (req, res) => {
   try {
-    const { id } = req.params                            
-   
-    
+    const { id } = req.params
 
     const result = await User.findByPk(id, {
       include: [
         {
-          model:Cart,
-          attributes:{ exclude:["user_id","createdAt","updatedAt"]},
+          model: Cart,
+          attributes: { exclude: ['user_id', 'createdAt', 'updatedAt'] },
           include: ProductCart
         },
         {
-          model:WishList,
-          attributes:{ exclude:["user_id","createdAt","updatedAt"]},
-          include:Product
+          model: WishList,
+          attributes: { exclude: ['user_id', 'createdAt', 'updatedAt'] },
+          include: Product
         },
         {
-          model:Purchase
+          model: Purchase
         }
       ]
     })
@@ -95,11 +94,9 @@ const verifyCode = async (req, res) => {
       returning: true
     })
 
-    await WishList.create({user_id:id})
-    console.log("hojana")
-    await Cart.create({user_id: id})
-
-  
+    await WishList.create({ user_id: id })
+    console.log('hojana')
+    await Cart.create({ user_id: id })
 
     emailcode.destroy()
     return res.status(200).json({ mgs: 'user validated' })
@@ -124,7 +121,7 @@ const loginUser = async (req, res) => {
 
     const user = await User.findOne({ where: { email } })
 
-    if (!user) return res.status(404).json({mgs:"invalid email"})
+    if (!user) return res.status(404).json({ mgs: 'invalid email' })
 
     if (user.isValid == false) return res.sendStatus(401)
 
@@ -172,15 +169,15 @@ const renewToken = async (req, res) => {
   }
 }
 
-const updateUser = async (req,res) => {
+const updateUser = async (req, res) => {
   try {
-      const {id} = req.params
-      const value = req.body
-      await User.update(value,{where:{id},returning:true})
-      console.log("mama")
-    return  res.status(200).json({mgs:"good"})
+    const { id } = req.params
+    const value = req.body
+    await User.update(value, { where: { id }, returning: true })
+    console.log('mama')
+    return res.status(200).json({ mgs: 'good' })
   } catch (error) {
-      return res.status(400)
+    return res.status(400)
   }
 }
 
