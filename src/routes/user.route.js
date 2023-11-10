@@ -1,4 +1,4 @@
-const { createUser, loginUser, verifyCode, updateUser, getUser, getCode, renewToken } = require('../controllers/user.controller')
+const { createUser, loginUser, verifyCode, updateUser, getUser, getCode, renewToken, getGoogleUser } = require('../controllers/user.controller')
 const express = require('express')
 const validateToken = require('../middleware/validateToken')
 const userRouter = express.Router()
@@ -8,6 +8,10 @@ userRouter.route('/')
 
 userRouter.route('/auth')
   .post(loginUser)
+
+
+userRouter.route("/google")
+.get( getGoogleUser)  
 
 userRouter.route('/verifyCode/:code')
   .get(verifyCode)

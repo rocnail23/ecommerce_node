@@ -181,6 +181,25 @@ const updateUser = async (req, res) => {
   }
 }
 
+const getGoogleUser = async (req,res) => {
+   if(!req.user.email) return res.status(400)
+   try {
+    const { name, email, role } = req.user
+    const payload = {
+      name,
+      email,
+      role
+    }
+    const token = jwt.sign(payload, process.env.SECRET, {
+      expiresIn: '2h'
+    })
+    console.log(token)
+    return res.status(200).json({ token })
+   } catch (error) {
+    res.status(400).json(error)
+   }
+}
+
 module.exports = {
   createUser,
   verifyCode,
@@ -189,5 +208,6 @@ module.exports = {
   getUser,
   getCode,
   renewToken,
-  updateUser
+  updateUser,
+  getGoogleUser
 }
