@@ -4,11 +4,13 @@ const {Image} = require("../models")
 const upImage = async (req, res) => {
     try {
       const {path,filename} = req.file
+      const {id} = req.params
       console.log({path,filename})
        const {secure_url,public_id} = await uploadToCloudinary(path, filename)
-        const image = await Image.create({ url: secure_url,name:public_id})
+       console.log("this are de dates",secure_url,public_id)
+        const image = await Image.create({ url: secure_url,name:public_id,images:id})
         console.log("imageeen")
-        return res.status(200).json(image)
+        return res.status(200).json({id:image.id})
     } catch (error) {
         return res.status(400)
     }

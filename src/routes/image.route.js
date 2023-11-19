@@ -5,8 +5,9 @@ const { upImage, removeImage, } = require("../controllers/image.controller")
 const multer = require("../middleware/multer")
 
 
-imageRouter.route("/")
+imageRouter.route("/:id")
 .post(multer.single("image"),upImage)
+
 
 imageRouter.route("/:id")
 .delete(removeImage)

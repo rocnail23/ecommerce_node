@@ -1,4 +1,4 @@
-const { Product, WishList, Categorie } = require('../models')
+const { Product, WishList, Categorie, Image } = require('../models')
 
 const getProducts = async (req, res) => {
   try {
@@ -6,11 +6,14 @@ const getProducts = async (req, res) => {
     const query = {}
     if(category){
       query.attributes = {exclude: ["Categorie","updatedAt","createdAt"]}
-      query.include = {model: Categorie, where: {name:category}}
+      query.include = {model: [Categorie], where: {name:category}}
+    }else{
+      query.include = {model:Image}
     }
+    
     const result = await Product.findAll(query)
     console.log(result[0].Categorie)
-    return res.status(400).json({ product: result })
+    return res.status(200).json({ product: result })
   } catch (error) {
     return res.status(400).json({ error })
   }
@@ -20,7 +23,7 @@ const getProductById = async (req, res) => {
   const { id } = req.params
 
   try {
-    const product = await Product.findByPk(id)
+    const product = await Product.findByPk(id,{include:Image})
     if (!product) return res.sendStatus(404)
     return res.status(200).json(product)
   } catch (error) {
@@ -34,9 +37,9 @@ const createProduct = async (req, res) => {
     if (role != 'admin') return res.sendStatus(403)
     const productBody = req.body
     console.log(productBody)
-    await Product.create(productBody)
+    const product = await Product.create(productBody)
 
-    return res.sendStatus(201)
+    return res.status(200).json({id:product.id})
   } catch (error) {
     return res.status(400).json({ mgs: error })
   }

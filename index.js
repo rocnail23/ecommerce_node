@@ -19,6 +19,8 @@ app.use(
 	})
 );
 
+
+
 app.use(function(request, response, next) {
   if (request.session && !request.session.regenerate) {
       request.session.regenerate = (cb) => {
@@ -45,11 +47,12 @@ app.use(helmet({
 app.use(express.json())
 
 
-
 app.use(cors({
   credentials: true,
   origin: "http://localhost:5173"
 }))
+
+
 
 app.use('/api/v1', require('./src/routes'))
 
@@ -60,5 +63,5 @@ app.get('/', (req, res) => {
 connectDb()
 
 app.listen(Port, (req, res) => {
-  console.log('listening in the port')
+  console.log('listening in the port', Port)
 })

@@ -4,9 +4,9 @@ const getCart = async (req, res) => {
   try {
     const { id } = req.user
     const cart = await Cart.findOne({ where: { user_id: id } })
-    const productCart1 = await cart.getProductCarts(
+    const productCart = await cart.getProductCarts(
       {
-        attributes: { exclude: ['createdAt', 'updatedAt', 'cart_id', 'product_id', 'id'] },
+        attributes: { exclude: ['createdAt', 'updatedAt', 'product_id', 'id',"purchase_id"] },
         include: [
           {
             model: Product,
@@ -15,7 +15,6 @@ const getCart = async (req, res) => {
         ]
       })
      
-      const productCart = await ProductCart.findAll()
     return res.status(200).json(productCart)
   } catch (error) {
     res.status(400).json(error)
@@ -59,7 +58,7 @@ const removeFromCart = async (req, res) => {
     const { id: user_id } = req.user
 
     const cart = await Cart.findOne({ where: user_id })
-    const Productcart = await ProductCart.destroy({where:{product_id},truncate:true})
+    const Productcart = await ProductCart.destroy({where:{product_id, cart_id:cart.id}})
     console.log("heeey")
    
     res.status(200).json({ mgs: 'product deleted' })

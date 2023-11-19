@@ -8,11 +8,11 @@ const createUser = async (req, res) => {
     const { name, password, email, urlBase } = req.body
     const body = { name, password, email }
     const existEmail = await User.findOne({where:{email}})
-    if(existEmail) return res.sendStatus(403)
+    if(existEmail) return res.status(403).json({mgs:"this email already exist"})
     body.password = await bcrypt.hash(password, 10)
     const result = await User.create(body)
     const code = require('crypto').randomBytes(64).toString('hex')
-    const url = `${urlBase}/verify_email/${code}`
+    const url = `${urlBase}/${code}`
     const send = await sendEmail({
       to: email,
       subject: 'verificacion de cuenta',
@@ -81,9 +81,7 @@ const getUser = async (req, res) => {
 const verifyCode = async (req, res) => {
   try {
     const { code } = req.params
-    console.log(req.params)
     const emailcode = await Code.findOne({ where: { code } })
-    console.log(emailcode)
     if (!emailcode) return res.sendStatus(401)
     const body = {
       isValid: true
@@ -93,11 +91,8 @@ const verifyCode = async (req, res) => {
       where: { id },
       returning: true
     })
-
     await WishList.create({ user_id: id })
-    console.log('hojana')
     await Cart.create({ user_id: id })
-
     emailcode.destroy()
     return res.status(200).json({ mgs: 'user validated' })
   } catch (error) {
@@ -163,7 +158,7 @@ const renewToken = async (req, res) => {
       expiresIn: '2h'
     })
     console.log(token)
-    return res.status(200).json({ token })
+    return res.status(200).json({ token , user:payload})
   } catch (error) {
     return res.status(400)
   }
@@ -182,7 +177,9 @@ const updateUser = async (req, res) => {
 }
 
 const getGoogleUser = async (req,res) => {
-   if(!req.user.email) return res.status(400)
+  
+   if(!req.user?.email) return res.sendStatus(400)
+   
    try {
     const { name, email, role } = req.user
     const payload = {
@@ -190,15 +187,23 @@ const getGoogleUser = async (req,res) => {
       email,
       role
     }
-    const token = jwt.sign(payload, process.env.SECRET, {
-      expiresIn: '2h'
-    })
-    console.log(token)
-    return res.status(200).json({ token })
+  
+    return res.status(200).json(payload)
    } catch (error) {
     res.status(400).json(error)
    }
 }
+
+const logout = (req, res) => {
+  req.logout(function(err) {
+    if (err) { return next(err); }
+    res.sendStatus(200)
+  });
+  
+    
+}
+   
+
 
 module.exports = {
   createUser,
@@ -209,5 +214,6 @@ module.exports = {
   getCode,
   renewToken,
   updateUser,
-  getGoogleUser
+  getGoogleUser,
+  logout
 }
