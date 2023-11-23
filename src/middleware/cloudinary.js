@@ -3,9 +3,9 @@ const path = require("path")
 const fs = require("fs")
 
 cloudinary.config({ 
-  cloud_name: 'dsifrqggq', 
-  api_key: '987457896872963', 
-  api_secret: 'rZvn1oxXsCRL9NdMgusElnkQFAc' 
+  cloud_name: process.env.CLOUD_NAME, 
+  api_key: process.env.API_KEY, 
+  api_secret: process.env.API_SECRET 
 });
 
 

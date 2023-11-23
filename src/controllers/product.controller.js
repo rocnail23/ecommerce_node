@@ -39,7 +39,7 @@ const createProduct = async (req, res) => {
     console.log(productBody)
     const product = await Product.create(productBody)
 
-    return res.status(200).json({id:product.id})
+    return res.status(200).json(product)
   } catch (error) {
     return res.status(400).json({ mgs: error })
   }
@@ -66,7 +66,7 @@ const updateProduct = async (req, res) => {
     const { role } = req.user
     if (role != 'admin') return res.sendStatus(403)
     const product = await Product.update(values, { where: { id }, returning: true })
-    return res.status(200).json({ product: product[1] })
+    return res.status(200).json( product[1][0] )
   } catch (error) {
     return res.status(400).json(error)
   }

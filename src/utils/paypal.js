@@ -1,5 +1,5 @@
-const { PAYPAL_CLIENT_ID, PAYPAL_CLIENT_SECRET } = process.env;
-const base = "https://api-m.sandbox.paypal.com";
+const { PAYPAL_CLIENT_ID, PAYPAL_CLIENT_SECRET,URL_API_PAYPAL } = process.env;
+const base = URL_API_PAYPAL;
 
 
 const generateAccessToken = async () => {
@@ -19,7 +19,7 @@ const generateAccessToken = async () => {
       });
       console.log(PAYPAL_CLIENT_ID, PAYPAL_CLIENT_SECRET)
       
-      console.log(response)
+    
       const data = await response.json();
       console.log("esta es la data", data)
       return data.access_token;
@@ -47,7 +47,7 @@ const generateAccessToken = async () => {
         {
           amount: {
             currency_code: "USD",
-            value: "100",
+            value: cart,
           },
         },
       ],
