@@ -14,10 +14,10 @@
     "dialect": "mysql"
   },
   "production": {
-    "username": "postgress",
-    "password": "root",
-    "database": "database_production",
-    "host": "127.0.0.1",
-    "dialect": "mysql"
+    "username": "ecommerce_db_k0qg_user",
+    "password": "Ga5D2RtxZZsQfdiyahgob8UtqPcLPJ7H",
+    "database": "ecommerce_db_k0qg",
+    "host": "dpg-clg8nlmr45ec73em0kfg-a",
+    "dialect": "postgres"
   }
 }
