@@ -32,8 +32,18 @@ const removeImage = async (req,res) => {
     }
 }
 
+const getImage = async (req,res) => {
+    try {
+        const images = await Image.findAll()
+        return res.status(200).json(images)
+    } catch (error) {
+      return res.status(400)
+    }
+}
+
 
 module.exports = {
     upImage,
-    removeImage
+    removeImage,
+    getImage
 }
