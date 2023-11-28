@@ -1,10 +1,10 @@
-const { WishList } = require('../models')
+const { WishList,Image } = require('../models')
 
 const getWishList = async (req, res) => {
   try {
     const { id } = req.user
     const cart = await WishList.findOne({ where: { user_id: id } })
-    const up = await cart.getProducts({ attributes: { exclude: ['WishListProduct', 'createdAt', 'updatedAt'] } })
+    const up = await cart.getProducts({ include: Image , attributes: { exclude: ['WishListProduct', 'createdAt', 'updatedAt'] } })
     return res.status(200).json(up)
   } catch (error) {
     return res.status(400)

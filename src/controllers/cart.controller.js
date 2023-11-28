@@ -1,4 +1,4 @@
-const { ProductCart, Product, Cart } = require('../models')
+const { ProductCart, Product, Cart,Image } = require('../models')
 
 const getCart = async (req, res) => {
   try {
@@ -10,6 +10,7 @@ const getCart = async (req, res) => {
         include: [
           {
             model: Product,
+            include:Image,
             attributes: { exclude: ['createdAt', 'updatedAt'] }
           }
         ]
