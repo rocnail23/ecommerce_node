@@ -49,7 +49,7 @@ app.use(express.json())
 
 app.use(cors({
   credentials: true,
-  origin: "http://localhost:5173"
+  origin: "https://main--jazzy-gelato-f6181a.netlify.app"
 }))
 
 
