@@ -10,7 +10,7 @@ const upImage = async (req, res) => {
        console.log("this are de dates",secure_url,public_id)
        
         console.log("imageeen")
-        return res.status(200).json({id:image.id,url:image.url})
+        return res.status(200).json()
     } catch (error) {
         return res.status(400)
     }
