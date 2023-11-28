@@ -5,6 +5,7 @@ const sequelize = new Sequelize('koyebdb', 'koyeb-adm', 'jRPsM1TYH7cS', {
   dialect: "postgres",
   dialectOptions:{
     ssl:{
+      require:true,
       rejectUnauthorized: false,
     }
   } /* one of 'mysql' | 'postgres' | 'sqlite' | 'mariadb' | 'mssql' | 'db2' | 'snowflake' | 'oracle' */
