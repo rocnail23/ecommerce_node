@@ -1,6 +1,11 @@
 const { Sequelize } = require('sequelize')
 
-const sequelize = new Sequelize(process.env.URI)
+const sequelize = new Sequelize('koyebdb', 'koyeb-adm', 'jRPsM1TYH7cS', {
+  host: 'ep-summer-silence-56907643.eu-central-1.aws.neon.tech',
+  dialect: "postgres",
+  ssl:true
+   /* one of 'mysql' | 'postgres' | 'sqlite' | 'mariadb' | 'mssql' | 'db2' | 'snowflake' | 'oracle' */
+});
 
 const connectDb = async () => {
   try {
