@@ -15,6 +15,8 @@ const uploadToCloudinary = async(localFilePath, filename) => {
     try {
         const folder = "ecommerce";
 
+        if(!cloud_name) return console.log("falta el cloudName")
+
         const public_id = folder + "/" + path.parse(filename).name
         const result = await cloudinary.uploader.upload( 
            localFilePath, 
