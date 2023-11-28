@@ -14,10 +14,10 @@
     "dialect": "mysql"
   },
   "production": {
-    "username": "postgres",
-    "password": "dcea31b3CBFFFCAcEb4*5Bgfbg*GEBdC",
-    "database": "railway",
-    "host": "roundhouse.proxy.rlwy.net",
+    "username": "koyeb-adm",
+    "password": "jRPsM1TYH7cS",
+    "database": "koyebdb",
+    "host": "ep-summer-silence-56907643.eu-central-1.aws.neon.tech",
     "dialect": "postgres"
   }
 }
