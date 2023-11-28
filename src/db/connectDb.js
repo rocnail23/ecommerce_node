@@ -1,7 +1,7 @@
 const { Sequelize } = require('sequelize')
 
-const sequelize = new Sequelize('koyebdb', 'koyeb-adm', 'jRPsM1TYH7cS', {
-  host: 'ep-summer-silence-56907643.eu-central-1.aws.neon.tech',
+const sequelize = new Sequelize('koyebdb', 'koyeb-adm', 'g38vOEMAnWjY', {
+  host: 'ep-shiny-union-05057869.eu-central-1.aws.neon.tech',
   dialect: "postgres",
   dialectOptions:{
     ssl:{

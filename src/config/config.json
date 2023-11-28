@@ -1,10 +1,16 @@
 {
   "development": {
     "username": "koyeb-adm",
-    "password": "jRPsM1TYH7cS",
+    "password": "g38vOEMAnWjY",
     "database": "koyebdb",
-    "host": "ep-summer-silence-56907643.eu-central-1.aws.neon.tech",
-    "dialect": "postgres"
+    "host": "ep-shiny-union-05057869.eu-central-1.aws.neon.tech",
+    "dialect": "postgres",
+    "dialectOptions": {
+      "ssl":{
+         "require":true,
+        "rejectUnauthorized": false
+      }
+    }
   },
   "test": {
     "username": "postgres",
