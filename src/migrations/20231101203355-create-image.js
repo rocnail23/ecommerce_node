@@ -17,7 +17,7 @@ module.exports = {
       },
       images: {
         type: Sequelize.INTEGER,
-        references: { model: 'Users', key: 'id' }
+        references: { model: 'Products', key: 'id' }
       },
       createdAt: {
         allowNull: false,
