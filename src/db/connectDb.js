@@ -4,7 +4,7 @@ const sequelize = new Sequelize('koyebdb', 'koyeb-adm', 'jRPsM1TYH7cS', {
   host: 'ep-summer-silence-56907643.eu-central-1.aws.neon.tech',
   dialect: "postgres",
   dialectOptions:{
-    ssl:"required"
+    ssl:true
   } /* one of 'mysql' | 'postgres' | 'sqlite' | 'mariadb' | 'mssql' | 'db2' | 'snowflake' | 'oracle' */
 });
 
