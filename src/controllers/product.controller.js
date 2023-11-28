@@ -9,6 +9,7 @@ const getProducts = async (req, res) => {
       query.include = {model: [Categorie], where: {name:category}}
     }else{
       query.include = {model:Image}
+      query.order = ["id", "DESC"]
     }
     
     const result = await Product.findAll(query)
