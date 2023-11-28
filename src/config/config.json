@@ -1,9 +1,9 @@
 {
   "development": {
     "username": "postgres",
-    "password": "root",
-    "database": "new_ecommerce",
-    "host": "127.0.0.1",
+    "password": "dcea31b3CBFFFCAcEb4*5Bgfbg*GEBdC",
+    "database": "railway",
+    "host": "roundhouse.proxy.rlwy.net",
     "dialect": "postgres"
   },
   "test": {
