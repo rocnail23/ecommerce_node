@@ -18,6 +18,12 @@
     "password": "jRPsM1TYH7cS",
     "database": "koyebdb",
     "host": "ep-summer-silence-56907643.eu-central-1.aws.neon.tech",
-    "dialect": "postgres"
+    "dialect": "postgres",
+    "dialectOptions": {
+      "ssl":{
+         "require":true,
+        "rejectUnauthorized": false
+      }
+    }
   }
 }
