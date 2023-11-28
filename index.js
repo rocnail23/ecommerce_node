@@ -49,7 +49,7 @@ app.use(express.json())
 
 app.use(cors({
   credentials: true,
-  origin: "https://main--jazzy-gelato-f6181a.netlify.app"
+  origin: "https://ecoomerce-project-seven.vercel.app"
 }))
 
 
